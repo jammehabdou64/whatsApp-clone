@@ -48,11 +48,18 @@ const Login = () => {
               </label>
               <Input
                 type="tel"
-                value={data.password}
+                value={data.phone}
                 onChange={onChangeHandler}
                 placeholder="Enter your phone number"
                 className="w-full"
               />
+              <small
+                className={
+                  errors?.phone ? "inline-block text-red-600 text-sm" : "hidden"
+                }
+              >
+                {errors?.phone}
+              </small>
             </div>
 
             <div>
@@ -66,6 +73,15 @@ const Login = () => {
                 placeholder="Enter your password"
                 className="w-full"
               />
+              <small
+                className={
+                  errors?.password
+                    ? "inline-block text-red-600 text-sm"
+                    : "hidden"
+                }
+              >
+                {errors?.password}
+              </small>
             </div>
 
             <Button
