@@ -1,0 +1,37 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "module": "ESNext",
+    "declaration": true,
+    "declarationMap": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/Model/*": ["app/Models/*"],
+      "@Controllers/*": ["app/Http/Controllers/*"],
+      "@/Request/*": ["app/Http/Requests/*"],
+      "@Providers/*": ["app/Providers/*"],
+      "@/Services/*": ["app/Services/*"],
+      "@Middleware/*": ["app/Http/Middlewares/*"],
+      "@/*": ["./resources/js/*"]
+    },
+    "esModuleInterop": true,
+    "outDir": "./build",
+    "strict": true,
+    "target": "ESNext",
+    "skipLibCheck": true,
+    "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "isolatedModules": true,
+    "noEmit": true,
+    "types": ["vite/client"],
+
+    "skipDefaultLibCheck": true
+  },
+  "include": ["**/*"],
+
+  "exclude": ["node_modules"]
+}
