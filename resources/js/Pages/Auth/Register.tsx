@@ -13,7 +13,7 @@ const Register = () => {
   };
   const { data, setData, processing, errors, post } = useForm({
     name: "",
-    email: "",
+    phone: "",
     password: "",
     confirmPassword: "",
   });
@@ -43,11 +43,19 @@ const Register = () => {
               </label>
               <Input
                 type="tel"
-                value={data.password}
+                value={data.name}
+                name="name"
                 onChange={onChangeHandler}
                 placeholder="Enter your phone number"
                 className="w-full"
               />
+              <small
+                className={
+                  errors?.name ? "inline-block text-red-600 text-sm" : "hidden"
+                }
+              >
+                {errors?.name}
+              </small>
             </div>
 
             <div>
@@ -56,11 +64,19 @@ const Register = () => {
               </label>
               <Input
                 type="tel"
-                value={data.password}
+                value={data.phone}
+                name="phone"
                 onChange={onChangeHandler}
                 placeholder="Enter your phone number"
                 className="w-full"
               />
+              <small
+                className={
+                  errors?.phone ? "inline-block text-red-600 text-sm" : "hidden"
+                }
+              >
+                {errors?.phone}
+              </small>
             </div>
 
             <div>
@@ -72,26 +88,24 @@ const Register = () => {
                 value={data.password}
                 onChange={onChangeHandler}
                 placeholder="Enter your password"
+                name="password"
                 className="w-full"
               />
-            </div>
-
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">
-                Confirm Password
-              </label>
-              <Input
-                type="password"
-                value={data.confirmPassword}
-                onChange={onChangeHandler}
-                placeholder="Enter your confirm-password"
-                className="w-full"
-              />
+              <small
+                className={
+                  errors?.password
+                    ? "inline-block text-red-600 text-sm"
+                    : "hidden"
+                }
+              >
+                {errors?.password}
+              </small>
             </div>
 
             <Button
               onClick={submit}
-              className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
+              disabled={processing}
+              className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
             >
               Register
             </Button>

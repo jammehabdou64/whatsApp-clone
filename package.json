@@ -61,7 +61,7 @@
     "fs-extra": "^11.3.0",
     "inflection": "^3.0.2",
     "jcc-eloquent": "^1.0.6",
-    "jcc-express-mvc": "^1.6.3",
+    "jcc-express-mvc": "^1.6.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.511.0",
     "morgan": "^1.10.0",

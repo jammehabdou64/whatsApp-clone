@@ -11,6 +11,7 @@ const Login = () => {
   const { data, errors, setData, processing, post } = useForm({
     phone: "",
     password: "",
+    email: "",
   });
 
   const onChangeHandler = (e: React.FormEvent<HTMLInputElement>) => {
@@ -55,10 +56,12 @@ const Login = () => {
               />
               <small
                 className={
-                  errors?.phone ? "inline-block text-red-600 text-sm" : "hidden"
+                  errors?.phone || errors?.email
+                    ? "inline-block text-red-600 text-sm"
+                    : "hidden"
                 }
               >
-                {errors?.phone}
+                {errors?.phone || errors?.email}
               </small>
             </div>
 
@@ -86,7 +89,8 @@ const Login = () => {
 
             <Button
               onClick={submit}
-              className="w-full bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
+              disabled={processing}
+              className="w-full cursor-pointer bg-green-500 hover:bg-green-600 text-white py-2 px-4 rounded-lg transition-colors"
             >
               Continue to WhatsApp
             </Button>

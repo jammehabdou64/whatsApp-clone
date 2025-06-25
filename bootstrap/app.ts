@@ -2,6 +2,7 @@ import { Application } from "jcc-express-mvc/Core";
 
 import { providers } from "./providers";
 import { Kernel } from "../app/Http/kernel";
+import { config } from "../app/Config/config";
 
 const app = Application.configuration()
   .withRouting([
@@ -15,6 +16,7 @@ const app = Application.configuration()
     },
   ])
   .withProviders(providers)
+  .withConfig(config)
   .withKernel(Kernel)
   .withMiddleware()
   .create();
