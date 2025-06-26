@@ -5,7 +5,9 @@ export class Migration {
       table.id();
       table.enum("chat_type", ["private", "group"]);
       table.string("name").nullable();
+      table.string("description").nullable();
       table.string("avatar").nullable();
+      table.foreign("created_by").references("id").on("users");
       table.timestamps();
       table.softDeletes();
     });

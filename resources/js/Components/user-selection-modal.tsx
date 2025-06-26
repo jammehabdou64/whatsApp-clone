@@ -90,9 +90,9 @@ export default function UserSelectionModal({
           {/* User List */}
           <div className="max-h-96 overflow-y-auto">
             {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
+              filteredUsers.map((user, index) => (
                 <div
-                  key={user.id}
+                  key={index}
                   onClick={() => handleUserSelect(user)}
                   className={`flex items-center p-4 cursor-pointer transition-colors border-b last:border-b-0 
                 hover:bg-gray-50 border-gray-100
@@ -100,7 +100,7 @@ export default function UserSelectionModal({
                 >
                   <div className="relative">
                     <img
-                      src={user.avatar || "/placeholder.svg"}
+                      src={user.avatar || "/users/default.png"}
                       alt={user.name}
                       className="w-12 h-12 rounded-full object-cover"
                     />

@@ -35,9 +35,9 @@ export default function ChatList({ searchQuery }: ChatListProps) {
 
   return (
     <div className="flex-1 overflow-y-auto">
-      {filteredChats.map((chat) => (
+      {filteredChats.map((chat, index) => (
         <div
-          key={chat.id}
+          key={index}
           onClick={() => selectChat(chat)}
           className={`flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 ${
             selectedChat?.id === chat.id ? "bg-gray-100" : ""
