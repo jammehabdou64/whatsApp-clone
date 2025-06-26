@@ -50,6 +50,7 @@ const Login = () => {
               <Input
                 type="tel"
                 value={data.phone}
+                name="phone"
                 onChange={onChangeHandler}
                 placeholder="Enter your phone number"
                 className="w-full"
@@ -71,10 +72,11 @@ const Login = () => {
               </label>
               <Input
                 type="text"
-                value={data.phone}
+                value={data.password}
                 onChange={onChangeHandler}
                 placeholder="Enter your password"
                 className="w-full"
+                name="password"
               />
               <small
                 className={

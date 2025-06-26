@@ -12,13 +12,19 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
+import UserSelectionModal from "./user-selection-modal";
 
 export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { user, logout } = useWhatsApp();
+  const { user, logout, theme, toggleTheme } = useWhatsApp();
+  const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   return (
-    <div className="w-full md:w-80 bg-white border-r border-gray-200 flex flex-col">
+    <div
+      className={`w-full md:w-80 border-r flex flex-col
+         bg-white border-gray-200"
+`}
+    >
       {/* Header */}
       <div className="bg-gray-50 p-4 border-b border-gray-200">
         <div className="flex items-center justify-between">
@@ -32,7 +38,7 @@ export default function Sidebar() {
               <h3 className="font-medium text-gray-900">{user?.name}</h3>
             </div>
           </div>
-          <div className="flex items-center space-x-2">
+          {/* <div className="flex items-center space-x-2">
             <Button variant="ghost" size="sm" className="p-2">
               <MessageSquare className="h-5 w-5 text-gray-600" />
             </Button>
@@ -40,6 +46,45 @@ export default function Sidebar() {
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="p-2">
                   <MoreVertical className="h-5 w-5 text-gray-600" />
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent align="end">
+                <DropdownMenuItem onClick={logout}>
+                  <LogOut className="h-4 w-4 mr-2" />
+                  Logout
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div> */}
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="ghost"
+              size="sm"
+              className="p-2"
+              onClick={() => setIsUserModalOpen(true)}
+            >
+              <MessageSquare className={`h-5 w-5  text-gray-600`} />
+            </Button>
+            {/* <Button
+              variant="ghost"
+              size="sm"
+              className="p-2"
+              onClick={toggleTheme}
+            >
+              {theme === "dark" ? (
+                <Sun
+                  className={`h-5 w-5 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
+                />
+              ) : (
+                <Moon
+                  className={`h-5 w-5 ${theme === "light" ? "text-gray-300" : "text-gray-600"}`}
+                />
+              )}
+            </Button> */}
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="ghost" size="sm" className="p-2">
+                  <MoreVertical className={`h-5 w-5 text-gray-600`} />
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
@@ -69,6 +114,10 @@ export default function Sidebar() {
 
       {/* Chat List */}
       <ChatList searchQuery={searchQuery} />
+      <UserSelectionModal
+        isOpen={isUserModalOpen}
+        onClose={() => setIsUserModalOpen(false)}
+      />
     </div>
   );
 }

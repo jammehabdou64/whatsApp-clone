@@ -1,3 +1,5 @@
+"use client";
+
 import { createContext, useContext, useState, type ReactNode } from "react";
 
 export interface Message {
@@ -28,17 +30,30 @@ export interface User {
   phone: string;
 }
 
+export interface AvailableUser {
+  id: string;
+  name: string;
+  avatar: string;
+  isOnline: boolean;
+  lastSeen?: Date;
+}
+
+// Add this to the WhatsAppContextType interface
 interface WhatsAppContextType {
   user: User | null;
   chats: Chat[];
   selectedChat: Chat | null;
   isLoggedIn: boolean;
   isTyping: boolean;
+  theme: "light" | "dark";
+  availableUsers: AvailableUser[];
   login: (user: User) => void;
   logout: () => void;
   selectChat: (chat: Chat) => void;
   sendMessage: (text: string, image?: string) => void;
   setTyping: (typing: boolean) => void;
+  toggleTheme: () => void;
+  startChatWithUser: (user: AvailableUser) => void;
 }
 
 const WhatsAppContext = createContext<WhatsAppContextType | undefined>(
@@ -49,7 +64,7 @@ const WhatsAppContext = createContext<WhatsAppContextType | undefined>(
 const mockUser: User = {
   id: "1",
   name: "John Doe",
-  avatar: "/users/default.png",
+  avatar: "/placeholder.svg?height=40&width=40",
   phone: "+1 234 567 8900",
 };
 
@@ -57,7 +72,7 @@ const mockChats: Chat[] = [
   {
     id: "1",
     name: "Alice Johnson",
-    avatar: "/users/default.png",
+    avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "Hey! How are you doing?",
     timestamp: new Date(Date.now() - 5 * 60 * 1000),
     unreadCount: 2,
@@ -73,28 +88,28 @@ const mockChats: Chat[] = [
       {
         id: "2",
         text: "Hello! How are you?",
-        timestamp: new Date(Date.now() - 55 * 60 * 1000),
+        timestamp: new Date(Date.now() - 55 * 60 * 60 * 1000),
         isSent: true,
         isRead: true,
       },
       {
         id: "3",
         text: "I'm doing great, thanks for asking!",
-        timestamp: new Date(Date.now() - 50 * 60 * 1000),
+        timestamp: new Date(Date.now() - 50 * 60 * 60 * 1000),
         isSent: false,
         isRead: true,
       },
       {
         id: "4",
-        image: "/messages/img.jpeg",
-        timestamp: new Date(Date.now() - 10 * 60 * 1000),
+        image: "/placeholder.svg?height=200&width=300",
+        timestamp: new Date(Date.now() - 10 * 60 * 60 * 1000),
         isSent: false,
         isRead: true,
       },
       {
         id: "5",
         text: "Hey! How are you doing?",
-        timestamp: new Date(Date.now() - 5 * 60 * 1000),
+        timestamp: new Date(Date.now() - 5 * 60 * 60 * 1000),
         isSent: false,
         isRead: false,
       },
@@ -103,7 +118,7 @@ const mockChats: Chat[] = [
   {
     id: "2",
     name: "Bob Smith",
-    avatar: "/users/user-3.jpeg",
+    avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "See you tomorrow!",
     timestamp: new Date(Date.now() - 2 * 60 * 60 * 1000),
     unreadCount: 0,
@@ -136,7 +151,7 @@ const mockChats: Chat[] = [
   {
     id: "3",
     name: "Family Group",
-    avatar: "/users/user-1.jpeg",
+    avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "Mom: Don't forget dinner tonight",
     timestamp: new Date(Date.now() - 4 * 60 * 60 * 1000),
     unreadCount: 5,
@@ -168,7 +183,7 @@ const mockChats: Chat[] = [
   {
     id: "4",
     name: "Sarah Wilson",
-    avatar: "/users/user-2.jpeg",
+    avatar: "/placeholder.svg?height=40&width=40",
     lastMessage: "Thanks for your help!",
     timestamp: new Date(Date.now() - 24 * 60 * 60 * 1000),
     unreadCount: 0,
@@ -200,12 +215,62 @@ const mockChats: Chat[] = [
   },
 ];
 
+// Add mock available users data after mockChats
+const mockAvailableUsers: AvailableUser[] = [
+  {
+    id: "5",
+    name: "Emma Thompson",
+    avatar: "/placeholder.svg?height=40&width=40",
+    isOnline: true,
+  },
+  {
+    id: "6",
+    name: "Michael Chen",
+    avatar: "/placeholder.svg?height=40&width=40",
+    isOnline: false,
+    lastSeen: new Date(Date.now() - 15 * 60 * 1000),
+  },
+  {
+    id: "7",
+    name: "Sofia Rodriguez",
+    avatar: "/placeholder.svg?height=40&width=40",
+    isOnline: true,
+  },
+  {
+    id: "8",
+    name: "David Kim",
+    avatar: "/placeholder.svg?height=40&width=40",
+    isOnline: false,
+    lastSeen: new Date(Date.now() - 2 * 60 * 60 * 1000),
+  },
+  {
+    id: "9",
+    name: "Lisa Anderson",
+    avatar: "/placeholder.svg?height=40&width=40",
+    isOnline: true,
+  },
+  {
+    id: "10",
+    name: "James Wilson",
+    avatar: "/placeholder.svg?height=40&width=40",
+    isOnline: false,
+    lastSeen: new Date(Date.now() - 30 * 60 * 1000),
+  },
+];
+
 export function WhatsAppProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null);
   const [chats, setChats] = useState<Chat[]>(mockChats);
   const [selectedChat, setSelectedChat] = useState<Chat | null>(null);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
+  const [theme, setTheme] = useState<"light" | "dark">("light");
+  // Add availableUsers state in the provider
+  const [availableUsers] = useState<AvailableUser[]>(mockAvailableUsers);
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
 
   const login = (userData: User) => {
     setUser(userData);
@@ -275,6 +340,33 @@ export function WhatsAppProvider({ children }: { children: ReactNode }) {
     setIsTyping(typing);
   };
 
+  // Add the startChatWithUser function
+  const startChatWithUser = (selectedUser: AvailableUser) => {
+    // Check if chat already exists
+    const existingChat = chats.find((chat) => chat.name === selectedUser.name);
+
+    if (existingChat) {
+      selectChat(existingChat);
+    } else {
+      // Create new chat
+      const newChat: Chat = {
+        id: selectedUser.id,
+        name: selectedUser.name,
+        avatar: selectedUser.avatar,
+        lastMessage: "Start a conversation...",
+        timestamp: new Date(),
+        unreadCount: 0,
+        isOnline: selectedUser.isOnline,
+        lastSeen: selectedUser.lastSeen,
+        messages: [],
+      };
+
+      setChats((prevChats) => [newChat, ...prevChats]);
+      setSelectedChat(newChat);
+    }
+  };
+
+  // Update the context provider value to include the new properties
   return (
     <WhatsAppContext.Provider
       value={{
@@ -283,14 +375,18 @@ export function WhatsAppProvider({ children }: { children: ReactNode }) {
         selectedChat,
         isLoggedIn,
         isTyping,
+        theme,
+        availableUsers,
         login,
         logout,
         selectChat,
         sendMessage,
         setTyping,
+        toggleTheme,
+        startChatWithUser,
       }}
     >
-      {children}
+      <div className={theme}>{children}</div>
     </WhatsAppContext.Provider>
   );
 }

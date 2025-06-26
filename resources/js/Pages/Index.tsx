@@ -2,13 +2,16 @@ import { Head } from "@inertiajs/react";
 
 import { WhatsAppProvider } from "@/Context";
 import Layout from "@/Components/layout";
+import { ThemeProvider } from "@/Components/theme-provider";
 const Home = () => {
   return (
     <>
       <Head title="Welcome" />
-      <WhatsAppProvider>
-        <Layout />
-      </WhatsAppProvider>
+      <ThemeProvider defaultTheme="system">
+        <WhatsAppProvider>
+          <Layout />
+        </WhatsAppProvider>
+      </ThemeProvider>
     </>
   );
 };
