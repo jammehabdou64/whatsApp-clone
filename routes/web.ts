@@ -1,5 +1,6 @@
 import { AuthController } from "@Controllers/AuthController";
 import { HomeController } from "@Controllers/HomeController";
+import { MessagesController } from "@Controllers/MessagesController";
 import { UsersController } from "@Controllers/UsersController";
 import { Auth } from "jcc-express-mvc/";
 import { Route } from "jcc-express-mvc/Core";
@@ -22,3 +23,5 @@ Route.prefix("/auth")
   });
 
 Route.get("/logout", Auth.logout);
+
+Route.middleware("auth").resource("/messages", MessagesController);

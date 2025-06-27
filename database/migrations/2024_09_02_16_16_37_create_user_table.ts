@@ -4,15 +4,13 @@ export class Migration {
     return Schema.create("users", (table) => {
       table.id();
       table.string("name");
+      table.string("slug").unique().nullable();
       table.string("phone").unique();
       table.string("avatar").nullable();
       table.string("email").unique().nullable();
       table.string("password");
-      table.string("online", 10).default("false");
-      table
-        .enum("status", ["online", "offline", "away", "busy"])
-        .default("offline");
-      table.dateTime("last_seen");
+      table.enum("status", [`online`, `offline`]).default("'offline'");
+      table.dateTime("last_seen").nullable();
       table.timestamps();
       table.softDeletes();
     });

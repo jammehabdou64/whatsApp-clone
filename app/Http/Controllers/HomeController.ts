@@ -17,7 +17,7 @@ export class HomeController {
     //
     return res.inertia("Index", {
       user: req.user,
-      availableUsers: await User.select("name", "slug", "avatar", "phone")
+      availableUsers: await User.select("id", "name", "slug", "avatar", "phone")
         .where("id", "!=", req.user?.id)
         .get(),
       chats: [],

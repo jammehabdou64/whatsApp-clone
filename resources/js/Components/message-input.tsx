@@ -5,17 +5,28 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Smile, Paperclip, Send, Mic } from "lucide-react";
 import { useWhatsApp } from "@/Context/index";
+import { useForm } from "@inertiajs/react";
 
 export default function MessageInput() {
-  const [message, setMessage] = useState("");
+  const { selectedChat, isTyping } = useWhatsApp();
+  const { data, post, reset, setData } = useForm({
+    message: "",
+    recepient_id: selectedChat?.id || "",
+  });
+
   const { sendMessage, setTyping } = useWhatsApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleSend = () => {
-    if (message.trim()) {
-      sendMessage(message.trim());
-      setMessage("");
+    if (data.message.trim()) {
+      sendMessage(data.message.trim());
+
       setTyping(false);
+      post("/messages", {
+        onSuccess() {
+          reset();
+        },
+      });
     }
   };
 
@@ -27,7 +38,7 @@ export default function MessageInput() {
   };
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setMessage(e.target.value);
+    setData("message", e.target.value);
     setTyping(e.target.value.length > 0);
   };
 
@@ -71,14 +82,14 @@ export default function MessageInput() {
           <Input
             type="text"
             placeholder="Type a message"
-            value={message}
+            value={data.message}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
-            className="border-none bg-white rounded-full px-4 py-2 focus:ring-2 focus:ring-green-500"
+            className="border-none bg-white text-gray-700 rounded-full px-4 py-2 focus:ring-2 focus:ring-green-500"
           />
         </div>
 
-        {message.trim() ? (
+        {data.message.trim() ? (
           <Button
             onClick={handleSend}
             className="bg-green-500 hover:bg-green-600 text-white rounded-full p-2"

@@ -9,7 +9,7 @@ export class Migration {
       table.text("body").nullable();
       table
         .enum("type", ["text", "image", "video", "audio", "document"])
-        .default("text");
+        .default("'text'");
       table.string("media_url").nullable(); // if media message
       table.string("`read`", 10).default("false");
       table.timestamps();
