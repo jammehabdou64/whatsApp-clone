@@ -14,15 +14,17 @@ export default function MessageArea() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [selectedChat?.messages]);
+  }, [selectedChat]);
 
   if (!selectedChat) return null;
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-[#e5ddd5] bg-opacity-50">
-      {selectedChat.messages.map((message) => (
-        <MessageBubble key={message.id} message={message} />
-      ))}
+      {
+        // selectedChat.map((message) => (
+        <MessageBubble key={selectedChat.id} message={selectedChat} />
+        // ))
+      }
 
       {isTyping && (
         <div className="flex justify-start">

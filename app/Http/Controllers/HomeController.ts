@@ -1,7 +1,11 @@
 import { User } from "@/Model/User";
+import { Inject } from "jcc-express-mvc/Core/Dependency";
 import { Request, Response, Next } from "jcc-express-mvc";
+import { UserRepository } from "../Repositories/UserRepository";
 
+@Inject()
 export class HomeController {
+  constructor(private user: UserRepository) {}
   /**
    *@access public
    * @return  Express Request Response
@@ -15,12 +19,15 @@ export class HomeController {
    */
   async index(req: Request, res: Response, next: Next) {
     //
+    const [availableUsers, chats] = await Promise.all([
+      this.user.availableUsers(req),
+      this.user.getUserChats(req),
+    ]);
+    console.log(chats);
     return res.inertia("Index", {
       user: req.user,
-      availableUsers: await User.select("id", "name", "slug", "avatar", "phone")
-        .where("id", "!=", req.user?.id)
-        .get(),
-      chats: [],
+      availableUsers,
+      chats,
     });
   }
 

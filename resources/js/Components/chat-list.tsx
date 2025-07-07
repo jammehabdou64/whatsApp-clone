@@ -12,7 +12,7 @@ export default function ChatList({ searchQuery }: ChatListProps) {
   const filteredChats = chats.filter(
     (chat) =>
       chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      chat.lastMessage.toLowerCase().includes(searchQuery.toLowerCase()),
+      chat?.message_body?.toLowerCase().includes(searchQuery.toLowerCase()),
   );
 
   const formatTime = (date: Date) => {
@@ -49,7 +49,7 @@ export default function ChatList({ searchQuery }: ChatListProps) {
               alt={chat.name}
               className="w-12 h-12 rounded-full object-cover"
             />
-            {chat.isOnline && (
+            {chat.status && (
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
             )}
           </div>
@@ -60,16 +60,19 @@ export default function ChatList({ searchQuery }: ChatListProps) {
                 {chat.name}
               </h3>
               <span className="text-xs text-gray-500 ml-2">
-                {formatTime(chat.timestamp)}
+                {
+                  // formatTime(chat.timestamp)
+                  chat.message_created_at
+                }
               </span>
             </div>
             <div className="flex items-center justify-between mt-1">
               <p className="text-sm text-gray-600 truncate">
-                {chat.lastMessage}
+                {chat.message_body}
               </p>
-              {chat.unreadCount > 0 && (
+              {chat.message_read && (
                 <span className="bg-green-500 text-white text-xs rounded-full px-2 py-1 ml-2 min-w-[20px] text-center">
-                  {chat.unreadCount}
+                  {chat.unreadCount || 1}
                 </span>
               )}
             </div>
