@@ -60,7 +60,7 @@
     "express-session": "^1.18.1",
     "fs-extra": "^11.3.0",
     "inflection": "^3.0.2",
-    "jcc-eloquent": "^1.0.6",
+    "jcc-eloquent": "^1.0.12",
     "jcc-express-mvc": "^1.6.4",
     "jsonwebtoken": "^9.0.2",
     "lucide-react": "^0.511.0",

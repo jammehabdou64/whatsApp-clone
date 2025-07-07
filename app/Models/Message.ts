@@ -3,6 +3,11 @@ import { User } from "./User";
 
 export class Message extends Model {
   //
+
+  protected static casts = {
+    created_at: "now",
+  };
+
   protected static table = "messages";
 
   public sender() {
