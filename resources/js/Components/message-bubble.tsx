@@ -8,7 +8,6 @@ interface MessageBubbleProps {
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
   const { auth } = usePage().props as any;
-  console.log({ message });
   return (
     <div
       className={`flex ${message.sender_id == auth?.id ? "justify-end" : "justify-start"}`}

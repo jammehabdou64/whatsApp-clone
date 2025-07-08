@@ -131,13 +131,13 @@ export class MessagesController {
    * @return Express Request Response
    */
   async store(req: Request, res: Response, next: Next) {
-    const { message, chatId, recepient_id } = req.body;
+    const { message, recepient_id } = req.body;
     //
 
     const save = await Message.create({
       sender_id: req.user?.id,
       recepient_id,
-      chat_id: "1",
+      chat_id: "12",
       body: message,
       type: "text",
     });

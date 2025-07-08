@@ -110,7 +110,6 @@ export function WhatsAppProvider({ children }: { children: ReactNode }) {
   };
 
   const setSelectChat = async (chat: Chat) => {
-    console.log(chat);
     const updatedChat: Chat = {
       ...chat,
       message_read: "1",
