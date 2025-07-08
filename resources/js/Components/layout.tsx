@@ -7,7 +7,6 @@ import { useEffect } from "react";
 const Layout = () => {
   const { auth, chats, availableUsers } = usePage().props as any;
   const { setAllChats, setAvailableUsers, setUserData } = useWhatsApp();
-  console.log({ auth, chats, availableUsers });
   useEffect(() => {
     setUserData(auth);
     setAvailableUsers(availableUsers);

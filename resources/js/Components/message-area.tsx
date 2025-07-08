@@ -20,11 +20,9 @@ export default function MessageArea() {
 
   return (
     <div className="flex-1 overflow-y-auto p-4 space-y-2 bg-[#e5ddd5] bg-opacity-50">
-      {
-        // selectedChat.map((message) => (
-        <MessageBubble key={selectedChat.id} message={selectedChat} />
-        // ))
-      }
+      {selectedChat.map((message) => (
+        <MessageBubble key={message.id} message={message} />
+      ))}
 
       {isTyping && (
         <div className="flex justify-start">

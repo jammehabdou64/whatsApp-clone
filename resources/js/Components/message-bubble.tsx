@@ -1,61 +1,51 @@
-"use client";
-
 import { Check, CheckCheck } from "lucide-react";
-import type { Message } from "@/Context/index";
+import { usePage } from "@inertiajs/react";
+import { Message } from "@/Context/index";
 
 interface MessageBubbleProps {
   message: Message;
 }
 
 export default function MessageBubble({ message }: MessageBubbleProps) {
-  const formatTime = (date: Date) => {
-    return date.toLocaleTimeString("en-US", {
-      hour: "numeric",
-      minute: "2-digit",
-      hour12: true,
-    });
-  };
-
+  const { auth } = usePage().props as any;
+  console.log({ message });
   return (
     <div
-      className={`flex ${message.message_is_sent ? "justify-end" : "justify-start"}`}
+      className={`flex ${message.sender_id == auth?.id ? "justify-end" : "justify-start"}`}
     >
       <div
         className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg shadow-sm ${
-          message.message_is_sent
+          message.sender_id == auth?.id
             ? "bg-green-500 text-white"
             : "bg-white text-gray-800"
         }`}
       >
-        {message.message_media_url && (
+        {message.media_url && (
           <div className="mb-2">
             <img
-              src={message.message_media_url || "/users/default.png"}
+              src={message.media_url || "/users/default.png"}
               alt="Shared image"
               className="rounded-lg max-w-full h-auto"
             />
           </div>
         )}
 
-        {message.message_body && (
-          <p className="text-sm">{message.message_body}</p>
-        )}
+        {message.body && <p className="text-sm">{message.body}</p>}
 
         <div
           className={`flex items-center justify-end mt-1 space-x-1 ${
-            message.message_is_sent ? "text-green-100" : "text-gray-500"
+            message.sender_id == auth?.id ? "text-green-100" : "text-gray-500"
           }`}
         >
           <span className="text-xs">
             {
-              //formatTime(
-              message.message_created_at
-              // )
+              // formatTime(new Date(message.created_at))
+              message.created_at
             }
           </span>
-          {message.message_is_sent && (
+          {message.sender_id == auth?.id && (
             <div className="flex">
-              {message.message_read ? (
+              {message.read ? (
                 <CheckCheck className="h-3 w-3" />
               ) : (
                 <Check className="h-3 w-3" />

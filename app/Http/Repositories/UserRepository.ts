@@ -27,10 +27,9 @@ export class UserRepository {
       .with("sender", "recipient")
       .latest()
       .map((chat) => {
-        // return chat;
-        if (chat?.sender_id == "1") {
+        if (chat?.sender_id == req?.user?.id) {
           return {
-            id: chat?.recipient_id,
+            id: chat?.recepient_id,
             name: chat?.recipient?.name,
             avatar: chat?.recipient?.avatar,
             slug: chat?.recipient?.slug,

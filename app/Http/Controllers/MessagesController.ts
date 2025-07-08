@@ -10,56 +10,61 @@ export class MessagesController {
    */
   async create(req: Request, res: Response, next: Next) {
     //
-    const rows = await Message.rawQuery(
-      `
-      SELECT MAX(id) as id
-      FROM messages
-      WHERE sender_id = ? OR recepient_id = ?
-      GROUP BY LEAST(sender_id, recepient_id), GREATEST(sender_id, recepient_id)
-    `,
-      [1, 1],
-    );
+    // const rows = await Message.rawQuery(
+    //   `
+    //   SELECT MAX(id) as id
+    //   FROM messages
+    //   WHERE sender_id = ? OR recepient_id = ?
+    //   GROUP BY LEAST(sender_id, recepient_id), GREATEST(sender_id, recepient_id)
+    // `,
+    //   [2, 2],
+    // );
 
-    const messages = await Message.whereIn(
-      "id",
-      rows.map((row: any) => row?.id),
-    )
-      .with("sender", "recipient")
-      .latest()
-      .map((chat) => {
-        // return chat;
-        if (chat?.sender_id == "1") {
-          return {
-            id: chat?.recipient_id,
-            name: chat?.recipient?.name,
-            avatar: chat?.recipient?.avatar,
-            slug: chat?.recipient?.slug,
-            last_seen: chat?.recipient?.last_seen,
-            status: chat?.recipient?.status,
-            message_body: chat?.body,
-            message_read: chat?.read,
-            message_type: chat?.type,
-            message_media_url: chat?.media_url,
-            message_created_at: chat?.created_at,
-            message_is_sent: true,
-          };
-        }
-        return {
-          id: chat?.sender_id,
-          name: chat?.sender?.name,
-          avatar: chat?.sender?.avatar,
-          slug: chat?.sender?.slug,
-          last_seen: chat?.sender?.last_seen,
-          status: chat?.sender?.status,
-          message_body: chat?.body,
-          message_read: chat?.read,
-          message_type: chat?.type,
-          message_media_url: chat?.media_url,
-          message_created_at: chat?.created_at,
-          message_is_sent: true,
-        };
-      });
+    // const messages = await Message.whereIn(
+    //   "id",
+    //   rows.map((row: any) => row?.id),
+    // )
+    //   .with("sender", "recipient")
+    //   .latest()
+    //   .map((chat) => {
+    //     // return chat;
+    //     if (chat?.sender_id == "1") {
+    //       return {
+    //         id: chat?.recipient_id,
+    //         name: chat?.recipient?.name,
+    //         avatar: chat?.recipient?.avatar,
+    //         slug: chat?.recipient?.slug,
+    //         last_seen: chat?.recipient?.last_seen,
+    //         status: chat?.recipient?.status,
+    //         message_body: chat?.body,
+    //         message_read: chat?.read,
+    //         message_type: chat?.type,
+    //         message_media_url: chat?.media_url,
+    //         message_created_at: chat?.created_at,
+    //         message_is_sent: true,
+    //       };
+    //     }
+    //     return {
+    //       id: chat?.sender_id,
+    //       name: chat?.sender?.name,
+    //       avatar: chat?.sender?.avatar,
+    //       slug: chat?.sender?.slug,
+    //       last_seen: chat?.sender?.last_seen,
+    //       status: chat?.sender?.status,
+    //       message_body: chat?.body,
+    //       message_read: chat?.read,
+    //       message_type: chat?.type,
+    //       message_media_url: chat?.media_url,
+    //       message_created_at: chat?.created_at,
+    //       message_is_sent: true,
+    //     };
+    //   });
 
+    const messages = await Message.where("sender_id", 1)
+      .where("recepient_id", 2)
+      .orWhere("sender_id", 2)
+      .where("recepient_id", 1)
+      .get();
     return res.json({ msg: messages });
   }
   /**
@@ -87,7 +92,7 @@ export class MessagesController {
       .map((chat) => {
         if (chat?.sender_id == req.user?.id) {
           return {
-            id: chat?.recipient_id,
+            id: chat?.recepient_id,
             name: chat?.recipient?.name,
             avatar: chat?.recipient?.avatar,
             slug: chat?.recipient?.slug,
@@ -117,40 +122,6 @@ export class MessagesController {
 
     return res.json({
       mesage: messages,
-      // await Chat.select("id", "created_by", "recepient_id")
-      //   .where("created_by", 1)
-      //   .orWhere("recepient_id", 1)
-      //   .with({
-      //     messages(query: typeof Builder) {
-      //       query.with(
-      //         {
-      //           sender(q: typeof Builder) {
-      //             q.select(
-      //               "id",
-      //               "name",
-      //               "avatar",
-      //               "phone",
-      //               "status",
-      //               "created_at",
-      //             );
-      //           },
-      //         },
-      //         {
-      //           recipient(query: typeof Builder) {
-      //             query.select(
-      //               "id",
-      //               "name",
-      //               "avatar",
-      //               "phone",
-      //               "status",
-      //               "created_at",
-      //             );
-      //           },
-      //         },
-      //       );
-      //     },
-      //   })
-      //   .get(),
     });
   }
 
@@ -160,21 +131,13 @@ export class MessagesController {
    * @return Express Request Response
    */
   async store(req: Request, res: Response, next: Next) {
-    const { message, chatId, created_by, recepient_id } = req.body;
+    const { message, chatId, recepient_id } = req.body;
     //
-    let chat = (await Chat.find(chatId)) as any;
-    if (!chat) {
-      chat = await Chat.create({
-        created_by: req.user?.id,
-        recepient_id,
-        chat_type: "private",
-      });
-    }
 
     const save = await Message.create({
       sender_id: req.user?.id,
       recepient_id,
-      chat_id: chat?.id,
+      chat_id: "1",
       body: message,
       type: "text",
     });
@@ -191,6 +154,15 @@ export class MessagesController {
    */
   async show(req: Request, res: Response, next: Next) {
     //
+    const selectedUserId = req.params.id;
+    const authId = req.user?.id;
+
+    const messages = await Message.where("sender_id", selectedUserId)
+      .where("recepient_id", authId)
+      .orWhere("sender_id", authId)
+      .where("recepient_id", selectedUserId)
+      .get();
+    return res.json({ message: messages, success: true });
   }
 
   /**

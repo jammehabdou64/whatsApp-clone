@@ -5,13 +5,15 @@ import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Smile, Paperclip, Send, Mic } from "lucide-react";
 import { useWhatsApp } from "@/Context/index";
-import { useForm } from "@inertiajs/react";
+import { useForm, usePage } from "@inertiajs/react";
 
 export default function MessageInput() {
   const { selectedChat, isTyping } = useWhatsApp();
+  const { auth } = usePage().props as any;
   const { data, post, reset, setData } = useForm({
     message: "",
-    recepient_id: selectedChat?.id || "",
+    recepient_id: "1",
+    sender_id: auth?.id,
   });
 
   const { sendMessage, setTyping } = useWhatsApp();
@@ -19,7 +21,7 @@ export default function MessageInput() {
 
   const handleSend = () => {
     if (data.message.trim()) {
-      sendMessage(data.message.trim());
+      sendMessage(data.recepient_id, data.sender_id, data.message.trim());
 
       setTyping(false);
       post("/messages", {
@@ -48,7 +50,7 @@ export default function MessageInput() {
       const reader = new FileReader();
       reader.onload = (event) => {
         const imageUrl = event.target?.result as string;
-        sendMessage("", imageUrl);
+        sendMessage(data.recepient_id, data.sender_id, "", imageUrl);
       };
       reader.readAsDataURL(file);
     }

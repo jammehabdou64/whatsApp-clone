@@ -7,8 +7,7 @@ interface ChatListProps {
 }
 
 export default function ChatList({ searchQuery }: ChatListProps) {
-  const { chats, selectedChat, selectChat } = useWhatsApp();
-
+  const { chats, selectChat, setSelectChat } = useWhatsApp();
   const filteredChats = chats.filter(
     (chat) =>
       chat.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
@@ -38,9 +37,9 @@ export default function ChatList({ searchQuery }: ChatListProps) {
       {filteredChats.map((chat, index) => (
         <div
           key={index}
-          onClick={() => selectChat(chat)}
+          onClick={() => setSelectChat(chat)}
           className={`flex items-center p-3 hover:bg-gray-50 cursor-pointer border-b border-gray-100 ${
-            selectedChat?.id === chat.id ? "bg-gray-100" : ""
+            selectChat?.id === chat.id ? "bg-gray-100" : ""
           }`}
         >
           <div className="relative">
@@ -60,10 +59,7 @@ export default function ChatList({ searchQuery }: ChatListProps) {
                 {chat.name}
               </h3>
               <span className="text-xs text-gray-500 ml-2">
-                {
-                  // formatTime(chat.timestamp)
-                  chat.message_created_at
-                }
+                {formatTime(new Date(chat.message_created_at))}
               </span>
             </div>
             <div className="flex items-center justify-between mt-1">

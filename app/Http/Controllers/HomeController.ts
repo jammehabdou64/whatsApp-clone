@@ -23,7 +23,6 @@ export class HomeController {
       this.user.availableUsers(req),
       this.user.getUserChats(req),
     ]);
-    console.log(chats);
     return res.inertia("Index", {
       user: req.user,
       availableUsers,
