@@ -155,19 +155,7 @@ export function WhatsAppProvider({ children }: { children: ReactNode }) {
       id: `${Date.now()}-${Math.floor(Math.random() * 1000000)}`,
       chat_id: "1",
     };
-
-    // setChats((prevChats) =>
-    //   prevChats.map((chat) =>
-    //     chat.id === selectedChat.id ? updatedChat : chat,
-    //   ),
-    // );
-
-    setSelectedChat((prev) => {
-      return {
-        ...prev,
-        newMessage,
-      };
-    });
+    setSelectedChat((prev) => [...prev, newMessage]);
   };
 
   const setTyping = (typing: boolean) => {
@@ -179,25 +167,7 @@ export function WhatsAppProvider({ children }: { children: ReactNode }) {
     if (existingChat) {
       // selectChat(existingChat);
     } else {
-      // const newChat: Chat = {
-      //   id: user.id,
-      //   name: user.name,
-      //   avatar: user.avatar,
-      //   slug: user.slug || "",
-      //   status: user.status || "offline",
-      //   last_seen: user.last_seen || new Date(),
-      //   message_body: "",
-      //   message_read: "0",
-      //   message_type: "text",
-      //   message_media_url: "",
-      //   message_created_at: new Date().toISOString(),
-      //   unreadCount: 0,
-      //   lastMessage: "Start a conversation...",
-      //   timestamp: new Date(),
-      // };
-
       setChats((prevChats) => [...prevChats]);
-      // setSelectedChat(newChat);
     }
   };
 

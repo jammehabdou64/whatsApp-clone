@@ -8,11 +8,11 @@ import { useWhatsApp } from "@/Context/index";
 import { useForm, usePage } from "@inertiajs/react";
 
 export default function MessageInput() {
-  const { selectedChat, isTyping } = useWhatsApp();
+  const { selectChat, isTyping } = useWhatsApp();
   const { auth } = usePage().props as any;
   const { data, post, reset, setData } = useForm({
     message: "",
-    recepient_id: "1",
+    recepient_id: selectChat?.id || "",
     sender_id: auth?.id,
   });
 

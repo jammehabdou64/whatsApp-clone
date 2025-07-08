@@ -4,15 +4,15 @@ import { useWhatsApp } from "@/Context/index";
 import { formatDistanceToNow } from "date-fns";
 
 export default function ChatHeader() {
-  const { selectedChat } = useWhatsApp();
+  const { selectChat } = useWhatsApp();
 
-  if (!selectedChat) return null;
+  if (!selectChat) return null;
 
   const getStatusText = () => {
-    if (selectedChat.isOnline) {
+    if (selectChat.status == "online") {
       return "online";
-    } else if (selectedChat.lastSeen) {
-      return `last seen ${formatDistanceToNow(selectedChat.lastSeen, { addSuffix: true })}`;
+    } else if (selectChat.last_seen) {
+      return `last seen ${formatDistanceToNow(selectChat.last_seen, { addSuffix: true })}`;
     }
     return "offline";
   };
@@ -23,16 +23,16 @@ export default function ChatHeader() {
         <div className="flex items-center space-x-3">
           <div className="relative">
             <img
-              src={selectedChat.avatar || "/users/default.png"}
-              alt={selectedChat.name}
+              src={selectChat.avatar || "/users/default.png"}
+              alt={selectChat.name}
               className="w-10 h-10 rounded-full object-cover"
             />
-            {selectedChat.isOnline && (
+            {selectChat.status && (
               <div className="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-white"></div>
             )}
           </div>
           <div>
-            <h2 className="font-medium text-gray-900">{selectedChat.name}</h2>
+            <h2 className="font-medium text-gray-900">{selectChat.name}</h2>
             <p className="text-sm text-gray-600">{getStatusText()}</p>
           </div>
         </div>

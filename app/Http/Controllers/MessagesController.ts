@@ -132,8 +132,6 @@ export class MessagesController {
    */
   async store(req: Request, res: Response, next: Next) {
     const { message, recepient_id } = req.body;
-    //
-
     const save = await Message.create({
       sender_id: req.user?.id,
       recepient_id,

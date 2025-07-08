@@ -13,10 +13,11 @@ import {
   DropdownMenuTrigger,
 } from "./ui/dropdown-menu";
 import UserSelectionModal from "./user-selection-modal";
+import { Link } from "@inertiajs/react";
 
 export default function Sidebar() {
   const [searchQuery, setSearchQuery] = useState("");
-  const { user, logout, theme, toggleTheme } = useWhatsApp();
+  const { user, logout } = useWhatsApp();
   const [isUserModalOpen, setIsUserModalOpen] = useState(false);
 
   return (
@@ -38,24 +39,7 @@ export default function Sidebar() {
               <h3 className="font-medium text-gray-900">{user?.name}</h3>
             </div>
           </div>
-          {/* <div className="flex items-center space-x-2">
-            <Button variant="ghost" size="sm" className="p-2">
-              <MessageSquare className="h-5 w-5 text-gray-600" />
-            </Button>
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="p-2">
-                  <MoreVertical className="h-5 w-5 text-gray-600" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem onClick={logout}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-          </div> */}
+
           <div className="flex items-center space-x-2">
             <Button
               variant="ghost"
@@ -65,22 +49,7 @@ export default function Sidebar() {
             >
               <MessageSquare className={`h-5 w-5  text-gray-600`} />
             </Button>
-            {/* <Button
-              variant="ghost"
-              size="sm"
-              className="p-2"
-              onClick={toggleTheme}
-            >
-              {theme === "dark" ? (
-                <Sun
-                  className={`h-5 w-5 ${theme === "dark" ? "text-gray-300" : "text-gray-600"}`}
-                />
-              ) : (
-                <Moon
-                  className={`h-5 w-5 ${theme === "light" ? "text-gray-300" : "text-gray-600"}`}
-                />
-              )}
-            </Button> */}
+
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="p-2">
@@ -89,8 +58,10 @@ export default function Sidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end">
                 <DropdownMenuItem onClick={logout}>
-                  <LogOut className="h-4 w-4 mr-2" />
-                  Logout
+                  <Link href="/logout" className="flex items-center">
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Link>
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

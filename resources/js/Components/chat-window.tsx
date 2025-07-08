@@ -7,9 +7,9 @@ import MessageInput from "./message-input";
 import { MessageCircle } from "lucide-react";
 
 export default function ChatWindow() {
-  const { selectedChat } = useWhatsApp();
+  const { selectChat } = useWhatsApp();
 
-  if (!selectedChat) {
+  if (!selectChat) {
     return (
       <div className="flex-1 flex items-center justify-center bg-gray-50">
         <div className="text-center">
