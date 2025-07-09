@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Smile, Paperclip, Send, Mic } from "lucide-react";
@@ -12,10 +12,13 @@ export default function MessageInput() {
   const { auth } = usePage().props as any;
   const { data, post, reset, setData } = useForm({
     message: "",
-    recepient_id: selectChat?.id || "",
+    recepient_id: "",
     sender_id: auth?.id,
   });
 
+  useEffect(() => {
+    setData("recepient_id", selectChat?.id || "");
+  }, [selectChat]);
   const { sendMessage, setTyping } = useWhatsApp();
   const fileInputRef = useRef<HTMLInputElement>(null);
 

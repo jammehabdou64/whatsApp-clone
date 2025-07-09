@@ -18,6 +18,7 @@ export class AuthRequest extends FormRequest {
   async save() {
     await this.rules();
     const { name, phone, password } = await this.validated();
+    console.log({ name, phone, password });
     return User.create({
       phone,
       name,

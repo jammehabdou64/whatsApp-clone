@@ -20,25 +20,25 @@ export class Kernel {
     morgan("dev"),
     cookieParser(),
     cors(),
-    // session({
-    //   secret: "ggggggg",
-    //   resave: false,
-    //   saveUninitialized: false,
-    //   cookie: { maxAge: 60000 },
-    // }),
     session({
-      store: new FileStore({
-        path: `${rootPath}/public/sessions`,
-        retries: 1,
-        ttl: 3600,
-      }),
-      secret: "dev-secret-key",
+      secret: "ggggggg",
       resave: false,
       saveUninitialized: true,
-      cookie: {
-        maxAge: 3600000,
-      },
+      cookie: { maxAge: 3600000 },
     }),
+    // session({
+    //   store: new FileStore({
+    //     path: `${rootPath}/public/sessions`,
+    //     retries: 1,
+    //     ttl: 3600,
+    //   }),
+    //   secret: "dev-secret-key",
+    //   resave: false,
+    //   saveUninitialized: true,
+    //   cookie: {
+    //     maxAge: 3600000,
+    //   },
+    // }),
     flash(),
     fileUpload(),
     inertia({ rootView: "index" }),

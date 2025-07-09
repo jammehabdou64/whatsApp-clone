@@ -17,7 +17,7 @@ export interface Chat {
   id: string;
   name: string;
   avatar: string | null;
-  slug: string;
+  slug?: string;
   last_seen: Date | string;
   status: string;
   message_body: string;
@@ -45,8 +45,8 @@ export interface AvailableUser {
   avatar: string;
   slug?: string;
   isOnline: boolean;
-  last_seen?: Date;
-  status?: string;
+  last_seen: Date | string;
+  status: string;
 }
 
 // Context Type
@@ -163,12 +163,23 @@ export function WhatsAppProvider({ children }: { children: ReactNode }) {
   };
 
   const startChatWithUser = (user: AvailableUser) => {
-    const existingChat = chats.find((chat) => chat.id === user.id);
-    if (existingChat) {
-      // selectChat(existingChat);
-    } else {
-      setChats((prevChats) => [...prevChats]);
-    }
+    setSelectChat({
+      id: user.id,
+      name: user.name,
+      avatar: user?.avatar,
+      slug: user.slug,
+      last_seen: user?.last_seen,
+      status: user.status,
+      message_body: "",
+      message_read: "",
+      message_type: "",
+      message_media_url: "",
+      message_created_at: "",
+      unreadCount: 0,
+      message_is_sent: "",
+      lastMessage: "",
+      timestamp: new Date(),
+    });
   };
 
   const setAllChats = (newChats: Chat[]) => {

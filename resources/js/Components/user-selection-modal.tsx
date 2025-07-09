@@ -32,8 +32,8 @@ export default function UserSelectionModal({
   const getStatusText = (user: AvailableUser) => {
     if (user.isOnline) {
       return "online";
-    } else if (user.lastSeen) {
-      return `last seen ${formatDistanceToNow(user.lastSeen, { addSuffix: true })}`;
+    } else if (user.last_seen) {
+      return `last seen ${formatDistanceToNow(new Date(user.last_seen), { addSuffix: true })}`;
     }
     return "offline";
   };
